@@ -19,7 +19,7 @@ def changeImage(img, row):
 
 img_rows, img_cols = 256, int(256*1.5)
 
-root_dir = '/Users/xuwang/project/AMLTC/HW03/test/'
+root_dir = '/home/ec2-user/workspace/hw03/test/'
 rows = []
 with open(f'{root_dir}feats.csv')as f:
     f_csv = csv.reader(f)
@@ -42,7 +42,7 @@ for p in rows:
 x_train = np.array(x_train).astype('float32')
 x_train = x_train.reshape(x_train.shape[0], img_rows, img_cols, 1)
 
-model = keras.models.load_model('/Users/xuwang/project/AMLTC/HW03/m.h5')
+model = keras.models.load_model('/home/ec2-user/workspace/hw03/m.h5')
 y_pred = model.predict(x_train, batch_size=1)
 
 y_pred = y_pred.tolist()

@@ -17,9 +17,9 @@ from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D
 import cv2
 
-batch_size = 16
+batch_size = 32
 num_classes = 4
-epochs = 8
+epochs = 20
 
 # pretreatment 预处理
 # input image dimensions
@@ -41,7 +41,7 @@ def changeImage(img, row):
     change(img, p, 0, 6)
 
 
-root_dir = '/Users/xuwang/project/AMLTC/HW03/train/'
+root_dir = '/home/ec2-user/workspace/hw03/train/'
 rows = []
 with open(f'{root_dir}feats.csv')as f:
     f_csv = csv.reader(f)
@@ -56,6 +56,8 @@ for p in rows:
     y_index = int(p[4])-1
     y = [0, 0, 0, 0]
     y[y_index] = 1
+    if not os.path.isdir(f'{root_dir}images/{name}'):
+        continue
     for pi in os.listdir(f'{root_dir}images/{name}'):
         pic = cv2.imread(f'{root_dir}images/{name}/{pi}')
         pic_rs = cv2.resize(pic, (img_cols, img_rows), interpolation=cv2.INTER_AREA)
