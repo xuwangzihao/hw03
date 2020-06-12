@@ -29,8 +29,10 @@ rows = rows[1:]
 # 'id', 'age', 'HER2', 'P53', 'molecular_subtype'
 x_train = []
 y_train = []
+p_cnt = []
 for p in rows:
     name = p[0]
+    cnt = 0
     for pi in os.listdir(f'{root_dir}images/{name}'):
         pic = cv2.imread(f'{root_dir}images/{name}/{pi}')
         pic_rs = cv2.resize(pic, (img_cols, img_rows), interpolation=cv2.INTER_AREA)
@@ -38,6 +40,8 @@ for p in rows:
         changeImage(pic, row)
         print(pic.shape)
         x_train.append(pic.tolist())
+        cnt += 1
+    p_cnt.append(cnt)
 
 x_train = np.array(x_train).astype('float32')
 x_train = x_train.reshape(x_train.shape[0], img_rows, img_cols, 1)
@@ -48,7 +52,9 @@ y_pred = model.predict(x_train, batch_size=1)
 y_pred = y_pred.tolist()
 import csv
 
+p_index = 0
 with open("test.csv", "w") as csvfile:
     writer = csv.writer(csvfile)
     for i in range(len(rows)):
-        writer.writerow([rows[i][0], y_pred[i].index(max(y_pred[i]))+1])
+        writer.writerow([rows[i][0], y_pred[p_index].index(max(y_pred[p_index]))+1])
+        p_index += p_cnt[i]
